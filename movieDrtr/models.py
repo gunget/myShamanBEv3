@@ -18,8 +18,21 @@ class DirectorInfo(models.Model):
     def __str__(self):
         return self.name #어디서는 directorInfo테이블의 객체를 호출하면, 그 객체의 title값을 표시하라. 단, __str__을 적용해 문자형태로 알기쉽게 표기
 
+class WriterInfo(models.Model):
+    name = models.CharField(max_length=100, default='')
+    peopleCode = models.IntegerField()
+    created_date = models.DateTimeField(auto_now_add=True)
+    #글이 추가될 때 자동으로 날짜가 입력됨
+       
+    class Meta:#필드속성 외에 필요한 테이블의 파라미터를 정의하기 위해, 내부클래스 선언(이또한 상속받는 것)
+        ordering = ['name'] #모델객체의 리스트 출력시 이름순(오름차순)으로 정렬
+        #오름차순(ascending)은 순방향(일반적인 사용법 대로. 1-2-3, ㄱ-ㄴ-ㄷ, a-b-c). 오룸-일반(모두 ㅇ)
+        #내림차순(descending)은 역방향(일반적인 사용법과 반대)
 
-# "items": [ { "title": "<b>아이언맨</b>", "link": "https://movie.naver.com/movie/bi/mi/basic.nhn?code=123684", "image": "https://ssl.pstatic.net/imgmovie/mdi/mit110/1236/123684_P00_161340.JPG", "subtitle": "", "pubDate": "2014", "director": "김용수|", "actor": "이동욱|신세경|김갑수|", "userRating": "4.94" },
+    def __str__(self):
+        return self.name #어디서는 directorInfo테이블의 객체를 호출하면, 그 객체의 title값을 표시하라. 단, __str__을 적용해 문자형태로 알기쉽게 표기
+
+
 
 # keyword = str(input('검색어는? ='))
 # #네이버에서 검색할때 처럼 두가지이상의 키워드를 동시에 넣어도 &검색 된다.

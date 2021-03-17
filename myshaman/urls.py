@@ -17,12 +17,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.conf import settings
-from movieDrtr.views import apiView, getPeopleView, getPeopleListView
+from movieDrtr.views import apiView, getPeopleListView, getPeopleListViewFT
 from rest_framework import routers
 from movieDrtr import views
 
 route = routers.DefaultRouter()
-route.register('directorInfo', views.directorInfoView, 'FirectorInfo')
+route.register('directorInfo', views.directorInfoView, 'DirectorInfo')
+route.register('writerInfo', views.writerInfoView, 'WriterInfo')
 # DefaultRouter를 쓰면 기본 url(여기선 directorInfo) 뒤에 다른 url을 써도 알아서 루팅해줌
 # 보통 viewset을 이용할때 @action을 써서 메소드를 추가하면 '기본url/메소드명'으로 호출시
 # 해당 메소드가 실행되게 된다.
@@ -31,5 +32,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(route.urls)),
     path('search/', apiView.as_view(), name='search'),
-    path('getPp/', getPeopleListView.as_view(), name='getPp')
+    path('getPpMovie/', getPeopleListView.as_view(), name='getPp'),
+    path('getPpWriter/', getPeopleListViewFT.as_view(), name='getPpFT')
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -13,8 +13,8 @@ from myshaman import settings
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from .serializers import DirectorInfoSerializer
-from .models import DirectorInfo
+from .serializers import DirectorInfoSerializer, WriterInfoSerializer
+from .models import DirectorInfo, WriterInfo
 
 class directorInfoView(viewsets.ModelViewSet):
     queryset = DirectorInfo.objects.all()
@@ -26,6 +26,11 @@ class directorInfoView(viewsets.ModelViewSet):
     def clearTempImage(self, request):
         shutil.rmtree(f"{settings.BASE_DIR}/tempImage")
         return HttpResponse("folder removed.")
+
+class writerInfoView(viewsets.ModelViewSet):
+    queryset = WriterInfo.objects.all()
+    serializer_class = WriterInfoSerializer
+
 
 class apiView(View):
     
@@ -78,7 +83,6 @@ class getPeopleListView(View):
             # 네이버영화에서 PEOPLE CODE 받아오기
             searchDtr = request.GET.get('searchDrt')
             encText = urllib.parse.quote(searchDtr)
-            # encText = urllib.parse.quote("스티븐스필버그")
             url = f'https://movie.naver.com/movie/search/result.nhn?query={encText}&section=people&ie=utf8'
             html = urllib.request.urlopen(url)
             bsObj = bs4.BeautifulSoup(html, "html.parser")
@@ -86,7 +90,7 @@ class getPeopleListView(View):
             peopleCode = 0
             for i in range(len(peopleLists)):
                 element = peopleLists[i]
-                tempText = element.get_text()
+                tempText = element.get_text() #모든 엘러먼트의 텍스트만 전부 골라서 받아짐
                 searchResult = tempText.find("감독")
                 if (searchResult != -1):
                     peopleCode = int(element.select_one("dl>dt>a")['href'].split('=')[-1])
@@ -104,5 +108,31 @@ class getPeopleListView(View):
         except:
             return HttpResponse(status=503,data='No matched data')
 
-# https://movie.naver.com/movie/bi/pi/filmoMission.nhn?peopleCode=9479&year=0
+class getPeopleListViewFT(View):
+    
+    def get(self, request):
+        try:
+            # 네이버검색에서 PEOPLE CODE 받아오기
+            searchWtr = request.GET.get('searchWtr')
+            encText = urllib.parse.quote(searchWtr)
+            url = f"https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query={encText}"
+            html = urllib.request.urlopen(url)
+            bsObj = bs4.BeautifulSoup(html, "html.parser")
+            peopleLists = bsObj.select("section#people_info_z div.same_people ul li")
+            peopleCode = 0
+            if peopleLists :
+                for i in range(len(peopleLists)):
+                    element = peopleLists[i]
+                    tempText = element.get_text()
+                    searchResult = tempText.find("드라마작가")
+                    searchResult2 = tempText.find("소설가")
+                    if (searchResult != -1) or (searchResult2 != -1):
+                        tempList = peopleLists[0].select_one("div.same_con a")['href']
+                        peopleCode = tempList.split('&os=')[-1].split('&')[0]
+            else:
+                peopleCode = int(bsObj.select_one("section#people_info_z dd.name > a")['href'].split('=')[-1])
 
+            return HttpResponse(peopleCode)
+
+        except:
+            return HttpResponse(status=503,data='No matched data')
