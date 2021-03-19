@@ -1,6 +1,6 @@
 from rest_framework import serializers
 # from .models import Fbooks
-from .models import DirectorInfo, WriterInfo
+from .models import DirectorInfo, FicWriterInfo
 
 class DirectorInfoSerializer(serializers.ModelSerializer):
     image = serializers.ImageField(use_url=True)
@@ -8,7 +8,7 @@ class DirectorInfoSerializer(serializers.ModelSerializer):
         model = DirectorInfo
         fields = "__all__"
 
-class WriterInfoSerializer(serializers.ModelSerializer):
+class FicWriterInfoSerializer(serializers.ModelSerializer):
     class Meta:
-        model = WriterInfo
+        model = FicWriterInfo
         fields = "__all__"

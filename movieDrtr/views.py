@@ -13,8 +13,8 @@ from myshaman import settings
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from .serializers import DirectorInfoSerializer, WriterInfoSerializer
-from .models import DirectorInfo, WriterInfo
+from .serializers import DirectorInfoSerializer, FicWriterInfoSerializer
+from .models import DirectorInfo, FicWriterInfo
 
 class directorInfoView(viewsets.ModelViewSet):
     queryset = DirectorInfo.objects.all()
@@ -27,9 +27,9 @@ class directorInfoView(viewsets.ModelViewSet):
         shutil.rmtree(f"{settings.BASE_DIR}/tempImage")
         return HttpResponse("folder removed.")
 
-class writerInfoView(viewsets.ModelViewSet):
-    queryset = WriterInfo.objects.all()
-    serializer_class = WriterInfoSerializer
+class ficWriterInfoView(viewsets.ModelViewSet):
+    queryset = FicWriterInfo.objects.all()
+    serializer_class = FicWriterInfoSerializer
 
 
 class apiView(View):

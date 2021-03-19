@@ -18,7 +18,7 @@ class DirectorInfo(models.Model):
     def __str__(self):
         return self.name #어디서는 directorInfo테이블의 객체를 호출하면, 그 객체의 title값을 표시하라. 단, __str__을 적용해 문자형태로 알기쉽게 표기
 
-class WriterInfo(models.Model):
+class FicWriterInfo(models.Model):
     name = models.CharField(max_length=100, default='')
     peopleCode = models.IntegerField()
     created_date = models.DateTimeField(auto_now_add=True)

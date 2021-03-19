@@ -1,6 +1,6 @@
 from django.contrib import admin
-from movieDrtr.models import DirectorInfo, WriterInfo
+from movieDrtr.models import DirectorInfo, FicWriterInfo
 
 admin.site.register(DirectorInfo)
-admin.site.register(WriterInfo)
+admin.site.register(FicWriterInfo)
 # Register your models here.
