@@ -21,6 +21,7 @@ class DirectorInfo(models.Model):
 class FicWriterInfo(models.Model):
     name = models.CharField(max_length=100, default='')
     peopleCode = models.IntegerField()
+    job = models.CharField(max_length=100, default='', blank=True, null=True)
     created_date = models.DateTimeField(auto_now_add=True)
     #글이 추가될 때 자동으로 날짜가 입력됨
        
