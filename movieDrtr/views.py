@@ -13,8 +13,8 @@ from myshaman import settings
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from .serializers import DirectorInfoSerializer, FicWriterInfoSerializer
-from .models import DirectorInfo, FicWriterInfo
+from .serializers import DirectorInfoSerializer, FicWriterInfoSerializer, NonFicWriterInfoSerializer
+from .models import DirectorInfo, FicWriterInfo, NonFicWriterInfo
 
 class directorInfoView(viewsets.ModelViewSet):
     queryset = DirectorInfo.objects.all()
@@ -30,6 +30,10 @@ class directorInfoView(viewsets.ModelViewSet):
 class ficWriterInfoView(viewsets.ModelViewSet):
     queryset = FicWriterInfo.objects.all()
     serializer_class = FicWriterInfoSerializer
+
+class NonficWriterInfoView(viewsets.ModelViewSet):
+    queryset = NonFicWriterInfo.objects.all()
+    serializer_class = NonFicWriterInfoSerializer
 
 
 class apiView(View):
@@ -76,7 +80,7 @@ class getPeopleView(View):
         except:
             return HttpResponse(status=503,data='No matched data')
 
-class getPeopleListView(View):
+class getPeopleListViewMV(View):
     
     def get(self, request):
         try:
@@ -95,13 +99,13 @@ class getPeopleListView(View):
                 if (searchResult != -1):
                     peopleCode = int(element.select_one("dl>dt>a")['href'].split('=')[-1])
 
-            # 임시로 사용할 이미지 다운 받기
-            BASE = settings.BASE_DIR
-            outpath = f'{BASE}/tempImage'
-            if not os.path.isdir(outpath):
-                os.makedirs(outpath)
-            ranNum = random.randint(1, 5000)
-            urllib.request.urlretrieve(f'https://mdl.artvee.com/ft/1{ranNum}po.jpg', f'{outpath}/{peopleCode}.jpg')
+            # # 임시로 사용할 이미지 다운 받기
+            # BASE = settings.BASE_DIR
+            # outpath = f'{BASE}/tempImage'
+            # if not os.path.isdir(outpath):
+            #     os.makedirs(outpath)
+            # ranNum = random.randint(1, 5000)
+            # urllib.request.urlretrieve(f'https://mdl.artvee.com/ft/1{ranNum}po.jpg', f'{outpath}/{peopleCode}.jpg')
             
             return HttpResponse(peopleCode)
 
@@ -114,6 +118,9 @@ class getPeopleListViewFT(View):
         try:
             # 네이버검색에서 PEOPLE CODE 받아오기
             searchWtr = request.GET.get('searchWtr')
+            jobs0 = request.GET.get('jobs[0]')
+            jobs1 = request.GET.get('jobs[1]')
+            jobs2 = request.GET.get('jobs[2]')
             encText = urllib.parse.quote(searchWtr)
             url = f"https://search.naver.com/search.naver?where=nexearch&sm=top_hty&fbm=1&ie=utf8&query={encText}"
             html = urllib.request.urlopen(url)
@@ -124,9 +131,10 @@ class getPeopleListViewFT(View):
                 for i in range(len(peopleLists)):
                     element = peopleLists[i]
                     tempText = element.get_text()
-                    searchResult = tempText.find("드라마작가")
-                    searchResult2 = tempText.find("소설가")
-                    if (searchResult != -1) or (searchResult2 != -1):
+                    searchResult = tempText.find(jobs0)
+                    searchResult2 = tempText.find(jobs1)
+                    searchResult3 = tempText.find(jobs2)
+                    if (searchResult != -1) or (searchResult2 != -1) or (searchResult3 != -1):
                         tempList = peopleLists[0].select_one("div.same_con a")['href']
                         peopleCode = tempList.split('&os=')[-1].split('&')[0]
             else:
