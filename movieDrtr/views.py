@@ -13,8 +13,8 @@ from myshaman import settings
 
 from rest_framework import viewsets
 from rest_framework.decorators import action
-from .serializers import DirectorInfoSerializer, FicWriterInfoSerializer, NonFicWriterInfoSerializer
-from .models import DirectorInfo, FicWriterInfo, NonFicWriterInfo
+from .serializers import DirectorInfoSerializer, FicWriterInfoSerializer, NonFicWriterInfoSerializer, OthersInfoSerializer
+from .models import DirectorInfo, FicWriterInfo, NonFicWriterInfo, OthersInfo
 
 class directorInfoView(viewsets.ModelViewSet):
     queryset = DirectorInfo.objects.all()
@@ -34,6 +34,10 @@ class ficWriterInfoView(viewsets.ModelViewSet):
 class NonficWriterInfoView(viewsets.ModelViewSet):
     queryset = NonFicWriterInfo.objects.all()
     serializer_class = NonFicWriterInfoSerializer
+
+class OthersInfoView(viewsets.ModelViewSet):
+    queryset = OthersInfo.objects.all()
+    serializer_class = OthersInfoSerializer
 
 
 class apiView(View):
@@ -99,13 +103,13 @@ class getPeopleListViewMV(View):
                 if (searchResult != -1):
                     peopleCode = int(element.select_one("dl>dt>a")['href'].split('=')[-1])
 
-            # # 임시로 사용할 이미지 다운 받기
-            # BASE = settings.BASE_DIR
-            # outpath = f'{BASE}/tempImage'
-            # if not os.path.isdir(outpath):
-            #     os.makedirs(outpath)
-            # ranNum = random.randint(1, 5000)
-            # urllib.request.urlretrieve(f'https://mdl.artvee.com/ft/1{ranNum}po.jpg', f'{outpath}/{peopleCode}.jpg')
+            # 임시로 사용할 이미지 다운 받기
+            BASE = settings.BASE_DIR
+            outpath = f'{BASE}/tempImage'
+            if not os.path.isdir(outpath):
+                os.makedirs(outpath)
+            ranNum = random.randint(1, 5000)
+            urllib.request.urlretrieve(f'https://mdl.artvee.com/ft/1{ranNum}po.jpg', f'{outpath}/{peopleCode}.jpg')
             
             return HttpResponse(peopleCode)
 
