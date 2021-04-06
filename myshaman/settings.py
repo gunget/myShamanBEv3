@@ -9,10 +9,6 @@ import datetime
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# 집pc값
-# >>> Path('settings.py').resolve().parent.parent
-# WindowsPath('D:/김건/개인자료/python 수업/RctDjgPJT/RctDjgPJT')
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
