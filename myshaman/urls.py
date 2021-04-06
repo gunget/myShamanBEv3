@@ -35,5 +35,8 @@ urlpatterns = [
     path('api/', include(route.urls)),
     path('search/', apiView.as_view(), name='search'),
     path('getPpMovie/', getPeopleListViewMV.as_view(), name='getPp'),
-    path('getPpWriter/', getPeopleListViewFT.as_view(), name='getPpFT')
+    path('getPpWriter/', getPeopleListViewFT.as_view(), name='getPpFT'),
+
+    path("rest-auth/", include('rest_auth.urls')),
+    path("rest-auth/registration/", include('rest_auth.registration.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

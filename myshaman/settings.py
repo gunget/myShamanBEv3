@@ -25,6 +25,14 @@ ALLOWED_HOSTS = local_setting.ALLOWED_HOSTS
 
 INSTALLED_APPS = [
     'corsheaders',
+    'rest_framework',
+    'rest_framework.authtoken',
+    'rest_auth',
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'rest_auth.registration',
+    'allauth.socialaccount',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -32,8 +40,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'movieDrtr.apps.MoviedrtrConfig',
-    'rest_framework',
 ]
+
+SITE_ID = 1
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
@@ -45,6 +54,15 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+#ACCOUNT_EMAIL_REQUIRED = True
+ACCOUNT_EMAIL_REQUIRED = False
+#ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+ACCOUNT_EMAIL_VERIFICATION = "none"
+# REST_USE_JWT = True
+ACCOUNT_LOGOUT_ON_GET = True
+
+# LOGIN_REDIRECT_URL = '/main/'
 
 ROOT_URLCONF = 'myshaman.urls'
 
