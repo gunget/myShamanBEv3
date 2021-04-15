@@ -14,12 +14,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.conf import settings
 from movieDrtr.views import apiView, getPeopleListViewMV, getPeopleListViewFT
 from rest_framework import routers
 from movieDrtr import views
+from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
 
 route = routers.DefaultRouter()
 route.register('directorInfo', views.directorInfoView, 'DirectorInfo')
@@ -39,4 +40,11 @@ urlpatterns = [
 
     path("rest-auth/", include('rest_auth.urls')),
     path("rest-auth/registration/", include('rest_auth.registration.urls')),
+
+    path('api-jwt-auth/', obtain_jwt_token),          # JWT 토큰 획득
+    path('api-jwt-auth/refresh/', refresh_jwt_token), # JWT 토큰 갱신
+    path('api-jwt-auth/verify/', verify_jwt_token),   # JWT 토큰 확인
+
+    # React담당해야하는 FrontEnd Urls
+    # re_path(r'^(?:.*)/?$', views.ReactAppView.as_view()), #그외 모든 url을 리액트가 처리
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
