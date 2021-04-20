@@ -74,12 +74,12 @@ JWT_AUTH = {
     'JWT_REFRESH_EXPIRATION_DELTA': datetime.timedelta(days=1),
 }
 
-# JWT_SECRET_KEY: JWT의 비밀키(Secret Key)로 어떤걸 사용할지 작성합니다. 여기에서는 장고(django)와 같은 비밀키를 사용하였지만 사용할 때는 다른 키를 사용하시길 권장합니다.
-# JWT_ALGORITHM: JWT 암호화에 사용되는 알고리즘을 지정합니다.
-# JWT_ALLOW_REFRESH: JWT 토큰을 갱신할 수 있게 할지 여부를 결정합니다.
-# JWT_EXPIRATION_DELTA: JWT 토큰의 유효 기간을 설정합니다.
-# JWT_REFRESH_EXPIRATION_DELTA: JWT 토큰 갱신의 유효기간 입니다.
-# JWT_EXPIRATION_DELTA와 JWT_REFRESH_EXPIRATION_DELTA이 잘 이해가 되지 않는데요. 위와 같이 설정한 경우 JWT 토큰을 7일 안에 갱신하지 않으면 JWT 토큰을 사용할 수 없고 로그아웃됩니다. 또한 7일안에 열심히 갱신해도 28일 후에는 갱신할 수 없습니다. 즉, 열심히 갱신해도 28일 후에는 로그아웃 처리가 되는 것을 의미합니다.
+# JWT_SECRET_KEY: JWT의 비밀키(Secret Key)로 어떤걸 사용할지 작성합니다. 여기에서는 장고(django)와 같은 비밀키를 사용하였지만 사용할 때는 다른 키를 사용하시길 권장.
+# JWT_ALGORITHM: JWT 암호화에 사용되는 알고리즘을 지정.
+# JWT_ALLOW_REFRESH: JWT 토큰을 갱신할 수 있게 할지 여부를 결정.
+# JWT_EXPIRATION_DELTA: JWT 토큰의 유효 기간을 설정.
+# JWT_REFRESH_EXPIRATION_DELTA: JWT 토큰 갱신의 유효기간.
+# JWT_EXPIRATION_DELTA와 JWT_REFRESH_EXPIRATION_DELTA이 잘 이해가 되지 않는데요. 위와 같이 설정한 경우 JWT 토큰을 7일 안에 갱신하지 않으면 JWT 토큰을 사용할 수 없고 로그아웃됩니다. 또한 7일안에 열심히 갱신해도 28일 후에는 갱신할 수 없습니다. 즉, 열심히 갱신해도 28일 후에는 로그아웃 처리가 되는 것을 의미.
 
 #ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_REQUIRED = False
