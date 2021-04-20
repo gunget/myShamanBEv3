@@ -1,8 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 
 class DirectorInfo(models.Model):
+    owner = models.ForeignKey(User, related_name='directorInfo', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default='')
     peopleCode = models.IntegerField()
     image = models.ImageField(upload_to='media/%Y/%m/%d', default='media/no_img.png', blank=True, null=True)
@@ -19,6 +21,7 @@ class DirectorInfo(models.Model):
         return self.name #어디서는 directorInfo테이블의 객체를 호출하면, 그 객체의 title값을 표시하라. 단, __str__을 적용해 문자형태로 알기쉽게 표기
 
 class FicWriterInfo(models.Model):
+    owner = models.ForeignKey(User, related_name='ficWriterInfo', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default='')
     peopleCode = models.IntegerField()
     job = models.CharField(max_length=100, default='', blank=True, null=True)
@@ -31,6 +34,7 @@ class FicWriterInfo(models.Model):
         return self.name
 
 class NonFicWriterInfo(models.Model):
+    owner = models.ForeignKey(User, related_name='nonFicWriterInfo', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default='')
     peopleCode = models.IntegerField()
     job = models.CharField(max_length=100, default='', blank=True, null=True)
@@ -43,6 +47,7 @@ class NonFicWriterInfo(models.Model):
         return self.name
 
 class OthersInfo(models.Model):
+    owner = models.ForeignKey(User, related_name='othersInfo', on_delete=models.CASCADE)
     name = models.CharField(max_length=100, default='')
     job = models.CharField(max_length=100, default='', blank=True, null=True)
     description = models.CharField(max_length=500, default='', blank=True, null=True)

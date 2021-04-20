@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.conf import settings
-from movieDrtr.views import apiView, getPeopleListViewMV, getPeopleListViewFT
+from movieDrtr.views import apiView, getPeopleListViewMV, getPeopleListViewFT,UserListView 
 from rest_framework import routers
 from movieDrtr import views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
@@ -37,6 +37,7 @@ urlpatterns = [
     path('search/', apiView.as_view(), name='search'),
     path('getPpMovie/', getPeopleListViewMV.as_view(), name='getPp'),
     path('getPpWriter/', getPeopleListViewFT.as_view(), name='getPpFT'),
+    path('users/', views.UserListView.as_view()),
 
     path("rest-auth/", include('rest_auth.urls')),
     path("rest-auth/registration/", include('rest_auth.registration.urls')),

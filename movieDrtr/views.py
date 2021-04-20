@@ -12,13 +12,25 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from myshaman import settings
 
 from rest_framework import viewsets
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
 from rest_framework.decorators import action
-from .serializers import DirectorInfoSerializer, FicWriterInfoSerializer, NonFicWriterInfoSerializer, OthersInfoSerializer
+from .serializers import DirectorInfoSerializer, FicWriterInfoSerializer, NonFicWriterInfoSerializer, OthersInfoSerializer, UserSerializer
 from .models import DirectorInfo, FicWriterInfo, NonFicWriterInfo, OthersInfo
+
+from django.contrib.auth.models import User
+
+class UserListView(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 class directorInfoView(viewsets.ModelViewSet):
     queryset = DirectorInfo.objects.all()
     serializer_class = DirectorInfoSerializer
+    permission_classes = [IsAuthenticated,]
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
     @action(detail=False)
     # list_route기능은 detail=false로 수용됨. 이렇게 하면 기본 url에 method명을 넣어서 get요청할 시,
@@ -30,15 +42,26 @@ class directorInfoView(viewsets.ModelViewSet):
 class ficWriterInfoView(viewsets.ModelViewSet):
     queryset = FicWriterInfo.objects.all()
     serializer_class = FicWriterInfoSerializer
+    permission_classes = [IsAuthenticated,]    
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class NonficWriterInfoView(viewsets.ModelViewSet):
     queryset = NonFicWriterInfo.objects.all()
     serializer_class = NonFicWriterInfoSerializer
+    permission_classes = [IsAuthenticated,]    
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class OthersInfoView(viewsets.ModelViewSet):
     queryset = OthersInfo.objects.all()
     serializer_class = OthersInfoSerializer
+    permission_classes = [IsAuthenticated,]    
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
 
 class apiView(View):
     
