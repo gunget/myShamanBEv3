@@ -13,7 +13,7 @@ from myshaman import settings
 
 from rest_framework import viewsets
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated, DjangoModelPermissions
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
 from .serializers import DirectorInfoSerializer, FicWriterInfoSerializer, NonFicWriterInfoSerializer, OthersInfoSerializer, UserSerializer
 from .models import DirectorInfo, FicWriterInfo, NonFicWriterInfo, OthersInfo
@@ -21,11 +21,12 @@ from .models import DirectorInfo, FicWriterInfo, NonFicWriterInfo, OthersInfo
 from django.contrib.auth.models import User
 
 class UserListView(generics.ListAPIView):
+    #custrom user tabel을 관리할 때 필요 한듯. django기본 admin을 사용할 경우 불필요 할 듯
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 class directorInfoView(viewsets.ModelViewSet):
-    queryset = DirectorInfo.objects.all()
+    # queryset = DirectorInfo.objects.all() # 사용자별로 데이터를 반환하기 위해 전체 queryset취소
     serializer_class = DirectorInfoSerializer
     permission_classes = [IsAuthenticated,]
 
@@ -39,29 +40,45 @@ class directorInfoView(viewsets.ModelViewSet):
         shutil.rmtree(f"{settings.BASE_DIR}/tempImage")
         return HttpResponse("folder removed.")
 
+    def get_queryset(self): #사용자별로 데이터를 필터링하기 위해 get_queryset 오버라이드
+        user = self.request.user
+        return DirectorInfo.objects.filter(owner=user)
+
 class ficWriterInfoView(viewsets.ModelViewSet):
-    queryset = FicWriterInfo.objects.all()
+    # queryset = FicWriterInfo.objects.all()
     serializer_class = FicWriterInfoSerializer
     permission_classes = [IsAuthenticated,]    
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
+    def get_queryset(self):
+        user = self.request.user
+        return FicWriterInfo.objects.filter(owner=user)
+
 class NonficWriterInfoView(viewsets.ModelViewSet):
-    queryset = NonFicWriterInfo.objects.all()
+    # queryset = NonFicWriterInfo.objects.all()
     serializer_class = NonFicWriterInfoSerializer
     permission_classes = [IsAuthenticated,]    
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+    
+    def get_queryset(self):
+        user = self.request.user
+        return NonFicWriterInfo.objects.filter(owner=user)
 
 class OthersInfoView(viewsets.ModelViewSet):
-    queryset = OthersInfo.objects.all()
+    # queryset = OthersInfo.objects.all()
     serializer_class = OthersInfoSerializer
     permission_classes = [IsAuthenticated,]    
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
+    
+    def get_queryset(self):
+        user = self.request.user
+        return OthersInfo.objects.filter(owner=user)
 
 class apiView(View):
     
@@ -107,7 +124,7 @@ class getPeopleView(View):
         except:
             return HttpResponse(status=503,data='No matched data')
 
-class getPeopleListViewMV(View):
+class getPeopleListViewMV(View): #Director List 받아오는 view
     
     def get(self, request):
         try:
@@ -139,7 +156,7 @@ class getPeopleListViewMV(View):
         except:
             return HttpResponse(status=503,data='No matched data')
 
-class getPeopleListViewFT(View):
+class getPeopleListViewFT(View): #FictionWriter, NonFicWriter받아오는 view
     
     def get(self, request):
         try:
