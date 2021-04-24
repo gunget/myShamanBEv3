@@ -143,14 +143,6 @@ class getPeopleListViewMV(View): #Director List 받아오는 view
                 if (searchResult != -1):
                     peopleCode = int(element.select_one("dl>dt>a")['href'].split('=')[-1])
 
-            # 임시로 사용할 이미지 다운 받기
-            BASE = settings.BASE_DIR
-            outpath = f'{BASE}/tempImage'
-            if not os.path.isdir(outpath):
-                os.makedirs(outpath)
-            ranNum = random.randint(1, 5000)
-            urllib.request.urlretrieve(f'https://mdl.artvee.com/ft/1{ranNum}po.jpg', f'{outpath}/{peopleCode}.jpg')
-            
             return HttpResponse(peopleCode)
 
         except:
@@ -184,6 +176,38 @@ class getPeopleListViewFT(View): #FictionWriter, NonFicWriter받아오는 view
             else:
                 peopleCode = int(bsObj.select_one("section#people_info_z dd.name > a")['href'].split('=')[-1])
 
+            return HttpResponse(peopleCode)
+
+        except:
+            return HttpResponse(status=503,data='No matched data')
+
+class getPeopleListViewMVWithArtvee(View): #그림도 받아오는 view
+    #그림 다운로드 서버가 불안정해 사용 안 하기로 결정
+    def get(self, request):
+        try:
+            # 네이버영화에서 PEOPLE CODE 받아오기
+            searchDtr = request.GET.get('searchDrt')
+            encText = urllib.parse.quote(searchDtr)
+            url = f'https://movie.naver.com/movie/search/result.nhn?query={encText}&section=people&ie=utf8'
+            html = urllib.request.urlopen(url)
+            bsObj = bs4.BeautifulSoup(html, "html.parser")
+            peopleLists = bsObj.select("ul.search_list_1>li")
+            peopleCode = 0
+            for i in range(len(peopleLists)):
+                element = peopleLists[i]
+                tempText = element.get_text() #모든 엘러먼트의 텍스트만 전부 골라서 받아짐
+                searchResult = tempText.find("감독")
+                if (searchResult != -1):
+                    peopleCode = int(element.select_one("dl>dt>a")['href'].split('=')[-1])
+
+            # 임시로 사용할 이미지 다운 받기
+            BASE = settings.BASE_DIR
+            outpath = f'{BASE}/tempImage'
+            if not os.path.isdir(outpath):
+                os.makedirs(outpath)
+            ranNum = random.randint(1, 5000)
+            urllib.request.urlretrieve(f'https://mdl.artvee.com/ft/1{ranNum}po.jpg', f'{outpath}/{peopleCode}.jpg')
+            
             return HttpResponse(peopleCode)
 
         except:

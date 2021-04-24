@@ -15,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 class DirectorInfoSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    image = serializers.ImageField(use_url=True)
+    # image = serializers.ImageField(use_url=True) #이미지처리시 사용
     class Meta:
         model = DirectorInfo
         fields = "__all__"
