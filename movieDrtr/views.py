@@ -171,7 +171,7 @@ class getPeopleListViewFT(View): #FictionWriter, NonFicWriter받아오는 view
                     searchResult2 = tempText.find(jobs1)
                     searchResult3 = tempText.find(jobs2)
                     if (searchResult != -1) or (searchResult2 != -1) or (searchResult3 != -1):
-                        tempList = peopleLists[0].select_one("div.same_con a")['href']
+                        tempList = peopleLists[i].select_one("div.same_con a")['href']
                         peopleCode = tempList.split('&os=')[-1].split('&')[0]
             else:
                 peopleCode = int(bsObj.select_one("section#people_info_z dd.name > a")['href'].split('=')[-1])
