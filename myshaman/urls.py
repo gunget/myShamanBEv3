@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.urls import path, include, re_path
 from django.conf.urls.static import static
 from django.conf import settings
-from movieDrtr.views import apiView, getPeopleListViewMV, getPeopleListViewFT,UserListView 
+from movieDrtr.views import apiView, getPeopleListViewMV, getPeopleListViewFT, UserListView, ReactAppView
 from rest_framework import routers
 from movieDrtr import views
 from rest_framework_jwt.views import obtain_jwt_token, refresh_jwt_token, verify_jwt_token
@@ -47,5 +47,5 @@ urlpatterns = [
     path('api-jwt-auth/verify/', verify_jwt_token),   # JWT 토큰 확인
 
     # React담당해야하는 FrontEnd Urls
-    # re_path(r'^(?:.*)/?$', views.ReactAppView.as_view()), #그외 모든 url을 리액트가 처리
+    re_path(r'^(?:.*)/?$', views.ReactAppView.as_view()), #그외 모든 url을 리액트가 처리
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

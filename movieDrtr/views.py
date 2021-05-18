@@ -212,3 +212,13 @@ class getPeopleListViewMVWithArtvee(View): #그림도 받아오는 view
 
         except:
             return HttpResponse(status=503,data='No matched data')
+
+class ReactAppView(View): #리액트가 프론트로 기능하는 것 세팅
+    
+    def get(self, request):
+        try:
+            with open(os.path.join(settings.BASE_DIR,'myshaman', 'build', 'index.html')) as file:
+                return HttpResponse(file.read())
+
+        except:
+            return HttpResponse(status=501,)

@@ -162,15 +162,16 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static') #개발자가 관리하는 파일들
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static') #개발자가 관리하는 파일들
 
-# #react를 프론트로 쓸 경우 
-# STATICFILES_DIRS = [
-#     os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(BASE_DIR))),'JavaScript_PJT', 'Nomad', 'rct_hooks_phonebook', 'build', 'static'),
-# ] 
+#react를 프론트로 쓸 경우 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR,'myshaman', 'build', 'static'),
+] 
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #사용자가 업로드한 파일 관리
 
-CORS_ORIGIN_WHITELIST = (  'http://localhost:3000',   'http://127.0.0.1:3000' ) 
-# CORS_ORIGIN_ALLOW_ALL = True, CORS_ALLOW_CREDENTIALS = True 그냥 전체 도메인을 추가 시
+CORS_ORIGIN_WHITELIST = ( 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8000', 'http://127.0.0.1:8000' ) 
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
