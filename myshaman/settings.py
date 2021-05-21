@@ -6,6 +6,9 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 import local_setting
 import datetime
 
+import mimetypes
+
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -95,7 +98,7 @@ ROOT_URLCONF = 'myshaman.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,'myshaman', 'build')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -175,3 +178,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #사용자가 업로드한 파일 �
 CORS_ORIGIN_WHITELIST = ( 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8000', 'http://127.0.0.1:8000' ) 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
+
+mimetypes.add_type("text/javascript", ".js", True)
