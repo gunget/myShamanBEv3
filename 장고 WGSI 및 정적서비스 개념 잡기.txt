@@ -1,0 +1,79 @@
+장고 정적(static)서비스 개념 잡기
+
+1. 장고서비스 개념도
+- 일반적 서비스 모델(소프트웨어 기준)
+ . client - 웹서버 - wsgi(webserver gateway interface) 서버(wsgi규격처리) - 웹 어플리케이션서버(WAS) - DB
+- 웹서버는 정적파일 요청을 주로 처리하고 동적파일 처리 요청시 이를 어플리케이션 서버에
+  위임 처리한다.
+ . 웹서버와 어플리케이션 서버 사이에는 둘 사이의 데이터 통신을 매개할 인터페이스가 존재
+ . 예전에는 CGI(common ~~)가 지금은 wsgi가 이를 담당한다. wsgi의 규약을 지키기만 하면
+  언어 종류와 상관없이 어플리케이션서버를 개발할 수 있으므로 지금은 대다수의 서비스가 
+  이 형태를 가진다고 함
+ . 장고는 mod_wsgi, uWSGI, Gunicon라는 WGSI서버가 이 역할을 담당한다고 함(장고 프레임워크에서 제공)
+ . 정리하면 장고가 커버하는 운용 영역은 wsgi서버-WAS(어플리케이션 실행)-DB까지인 것
+ . 장고의 개념을 설명할 때, wsgi서버를 WAS서버에 포함시켜 설명하기도 함(둘다 장고가 처리하기에).
+- 이는 웹서비스시 일반적인 정적요청 처리는 웹서버(Nginx, apache등)가 담당하고 동적요청
+  처리는 장고가 담당한다는 의미. 곧 장고 외에 별도의 웹서버가 필요한 것
+ . 웹서버는 어플리케이션이라는 객체(wgsi.py에 정의됨)를 통해 사용자가 만든 어플리케이션을 실행 함
+   따라서 웹/WAS 서버의 설정파일에는 application 호출자의 경로가 정의되어야 함.
+
+2. 장고의 static서비스 처리
+- 장고에서 말하는 정적파일은 크게 두종류. static파일과 media파일
+ . static파일은 css, jscript, image
+ . media파일은 사용자가 올리는 파일로 언제 어떻게 변할지 모르는 것들 총칭
+- static파일은 장고에서 직접처리하지 않음
+ . 실제 서비스 시, setting.py에 'STATIC_ROOT'에 특정 경로를 지정하고 manage.py로
+  findstatic과 collectstatic명령을 실행하면, 해당 경로에 모든 static파일들 복사되어
+  이후 웹서버가 이를 처리함.
+ . media파일은 내용이 실시간으로 변하기에 findstatic명령으론 처리하지 못함. 따로 복사해줘야
+  하는 듯
+- static file 개념 정리: https://it-eldorado.tistory.com/60
+장고 패키지는 기본적으로 staticfiles라는 이름의 내장 앱(django.contrib.staticfiles)을 가지고 있다. 여기서 말하는 앱이란
+우리가 startapp 명령어로 만드는 앱의 개념과 동일하다. staticfiles 앱은 장고가 프로젝트 폴더 내에서 필요한 정적
+ 파일들을 편리하게 탐색할 수 있도록 하는 기능을 제공한다. 이 앱의 기능을 제대로 활용하려면 장고의 설정 파일에
+ 다음과 같은 변수들의 값을 적절히 설정해줘야 한다.
+
+STATICFILES_FINDERS
+프로젝트 폴더 내에서 필요한 정적 파일들을 탐색하기 위한 (staticfiles 앱에 존재하는) 함수들의 이름을 지정한다.
+django.contrib.staticfiles.finders.FileSystemFinder 함수 : STATICFILES_DIR에 지정된 경로에서 정적 파일을 탐색한다.
+django.contrib.staticfiles.finders.AppDirectoriesFinder 함수 : 각 앱 폴더의 static 폴더에서 정적 파일을 탐색한다.
+ 각 앱의 위치는 INSTALLED_APPS에 명시된 정보를 바탕으로 파악한다.
+
+STATICFILES_DIR
+staticfiles 앱의 FileSystemFinder 함수가 정적 파일을 탐색하는 경로를 의미한다.
+
+STATIC_URL
+staticfiles 앱은 staticfiles(또는 static)라는 이름의 템플릿 태그 소스 파일에서 static이라는 이름의 템플릿 태그를 제공한다.
+템플릿 파일에서 "{% load staticfiles %}"로 해당 템플릿 태그 소스 파일을 로드하고 "{% static '{정적 파일 상대 경로}' %}"
+라고 작성하면, 장고는 이 부분을 STATIC_URL에 지정된 경로를 이용하여 절대 경로로 치환한다.
+즉 STATIC_URL은 정적 파일에게 GET 요청을 보낼 때 사용하는 URL을 의미하는 것이다.
+만약 정적 파일을 외부 서버(S3 등)에 저장한다면, 이 값은 해당 외부 서버의 URL로 설정이 되어야 할 것이다.
+
+STATIC_ROOT
+로컬 개발 환경의 경우, STATIC_URL에 지정된 경로를 통해 정적 파일에 접근을 시도하면 장고 개발 서버가 스스로
+ staticfiles 앱의 함수들(STATICFILES_FINDERS에 명시)을 실행하여 필요한 정적 파일을 찾아 클라이언트에게 제공해준다.
+실서버 배포 환경의 경우, STATIC_URL에 지정된 경로를 통해 정적 파일에 접근을 시도하면 웹 서버가 필요한 정적 파일을
+ 찾아서 제공해줘야 한다. 그러나 웹 서버는 장고 프로젝트 내 정적 파일들의 위치를 알지 못한다. 따라서 웹 서버가 필요한
+ 정적 파일을 쉽게 찾아 클라이언트에게 제공할 수 있도록, 장고 프로젝트 내 정적 파일들을 한 디렉토리에 모아둘
+ 필요가 있다. 그 경로를 지정하는 변수가 바로 STATIC_ROOT이다.
+"python manage.py collectstatic" 명령어를 수행하면, 장고는 staticfiles의 함수들(STATICFILES_FINDERS에 명시)을
+ 실행하여 장고 프로젝트 내 모든 정적 파일들을 찾고, 그것들을 STATIC_ROOT에 명시된 경로로 복사한다.
+따라서 웹 서버는 STATIC_URL에 지정된 경로로 요청이 들어오면 STATIC_ROOT에 지정된 경로로 찾아가서 정적 파일을
+ 찾도록 설정이 되어야 한다. (곧 살펴보겠지만, Elastic Beanstalk를 사용하면 이 설정도 쉽게 할 수 있다.)
+만약 정적 파일을 외부 서버(S3 등)에 저장한다면, collectstatic 명령어를 통해 STATIC_ROOT에 수집된 모든 정적
+ 파일들이 STATIC_STORAGE에 지정된 커스텀 스토리지 백엔드에 의해 해당 외부 서버로 옮겨진다. 이때 STATIC_URL은
+ 해당 외부 서버의 URL로 설정이 되어야 할 것이다.
+
+STATIC_STORAGE
+기본값 : StaticFilesStorage (웹 서버에서 직접 정적 파일을 제공하는 경우)
+만약 정적 파일을 외부 서버(S3 등)에 저장한다면, 이 값은 해당 외부 서버에 맞는 커스텀 스토리지 백엔드로 설정되어야 한다.
+
+3. 개발시 장고의 static파일 처리
+- 개발 시 웹서버가 없으므로 static파일 처리를 위한 별도의 수단 필요
+ . installed_app에 등록된 django.contrib.staticfiles 앱이 이 기능을 담당, runserver에서 static파일을
+  처리할 수 있게 해줌(static 태그를 사용해 static파일 호출을 처리). 물론 staticfiles의 위치를 지정해야 함
+- 하지만 media파일의 경우, 위 함수로 처리 불가능. 그래서 마치 실 서비스를 하는 것처럼 웹서버의
+  기능을 수행해줄 함수를 루트urlconf에 별도로 추가(+static()한 것). 그게 from django.conf.urls.static의 static함수. static함수는
+  media_root로 지정된 접두사에 해당파일의 경로를 추가해 url을 생성. object.image.url을 템플릿에서 실행하면,
+  url_conf에서 이 함수를 실행(django.views.static.serve라는 view가 이를 처리) 해당 파일을 반환해 줌 
+  

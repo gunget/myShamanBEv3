@@ -1,0 +1,1 @@
+A null file to use staticfiles folder safely

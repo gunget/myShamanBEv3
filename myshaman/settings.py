@@ -7,6 +7,8 @@ import local_setting
 import datetime
 
 import mimetypes
+import dj_database_url # 최상단에 선언부분에 입력
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -16,13 +18,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = local_setting.SECRET_KEY
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '-n%sr$4btonoo6!!q_+_9e4&*wsn$av4)77-t^o)m_*3m8@=4t')
+# 출처: https://zodlab.tistory.com/95 [조드군의 일상]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = local_setting.ALLOWED_HOSTS
-
+ALLOWED_HOSTS = ['*'] #조드군의 일상에선 이렇게 하라고함
+# ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+# ALLOWED_HOSTS = ['.herokuapp.com']
 
 # Application definition
 
@@ -40,8 +44,9 @@ INSTALLED_APPS = [
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
+    'django.contrib.messages', 
+    'django.contrib.staticfiles', 
+    #사용자 앱에서 쓰는 static파일들을 매핑해주는 앱이 staticfiles
     'movieDrtr.apps.MoviedrtrConfig',
 ]
 
@@ -56,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 REST_FRAMEWORK = {
@@ -124,6 +130,9 @@ DATABASES = {
     }
 }
 
+#기본 db인 sqlite3를 heroku전용인 postgreSQL로 바꾸는 설정
+db_from_env = dj_database_url.config(conn_max_age=500) # DB 설정부분 아래에 입력
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -162,15 +171,27 @@ USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
+# staticfiles라는 기본 앱이 사용하는 설정
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static') #개발자가 관리하는 파일들
+#장고 템플릿에서 static태그를 사용할 때 이 경로를 이용하여 절대경로로 치환한다.
+#템플릿을 사용하지 않는 리액트 프론트에서는 특별히 관계없는 설정
 
-#react를 프론트로 쓸 경우 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+# 아파치, nginx등 웹서버가 클라이언트에 static file을 제공해주려면, 파일들이 어디있는지
+# 알아야 한다. 이를 위해 collectstatic명령어로 파일을 모아 특정 폴더에 몰아넣는데,
+# 이때 사용하는 폴더가 Static_Root폴더. collectStatic명령어는 폴더를 만들지 않는다.
+# 반드시 미리 만들어져 있어야 함
+
+# staticfiles 기본앱이 프로젝트에서 사용되는 static파일들을 가져올때 사용하는 경로
+# react를 프론트로 쓸 경우 build/static경로를 찾아서 엮어주면 된다.
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'myshaman', 'build', 'static'),
 ] 
+
+# STATICFILES_STORAGE = [ ] 외부에 STATIC파일용 서버를 별도로 둘 경우 설정 필요
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #사용자가 업로드한 파일 관리
