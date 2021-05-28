@@ -7,7 +7,6 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 import datetime
 
 import mimetypes
-import django_heroku
 import dj_database_url # 최상단에 선언부분에 입력
 
 
@@ -25,8 +24,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '-n%sr$4btonoo6!!q_+_9e4&*wsn$a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-# ALLOWED_HOSTS = ['*'] #조드군의 일상에선 이렇게 하라고함
-ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+ALLOWED_HOSTS = ['*'] #조드군의 일상에선 이렇게 하라고함
+# ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 # ALLOWED_HOSTS = ['.herokuapp.com']
 
 # Application definition
@@ -202,5 +201,3 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 
 mimetypes.add_type("text/javascript", ".js", True)
-
-django_heroku.settings(locals())
