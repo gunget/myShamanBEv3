@@ -129,10 +129,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
-#기본 db인 sqlite3를 heroku전용인 postgreSQL로 바꾸는 설정
 db_from_env = dj_database_url.config(conn_max_age=500) # DB 설정부분 아래에 입력
 DATABASES['default'].update(db_from_env)
+#기본 db인 sqlite3를 heroku전용인 postgreSQL로 바꾸는 설정
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
