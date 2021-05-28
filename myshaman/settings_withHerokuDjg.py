@@ -7,7 +7,8 @@ sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 import datetime
 
 import mimetypes
-import dj_database_url # 최상단에 선언부분에 입력
+import django_heroku
+# import dj_database_url # 최상단에 선언부분에 입력
 
 
 
@@ -24,8 +25,8 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '-n%sr$4btonoo6!!q_+_9e4&*wsn$a
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
-ALLOWED_HOSTS = ['*'] #조드군의 일상에선 이렇게 하라고함
-# ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
+# ALLOWED_HOSTS = ['*'] #조드군의 일상에선 이렇게 하라고함
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 # ALLOWED_HOSTS = ['.herokuapp.com']
 
 # Application definition
@@ -129,9 +130,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-db_from_env = dj_database_url.config(conn_max_age=500) # DB 설정부분 아래에 입력
-DATABASES['default'].update(db_from_env)
-#기본 db인 sqlite3를 heroku전용인 postgreSQL로 바꾸는 설정
+# #기본 db인 sqlite3를 heroku전용인 postgreSQL로 바꾸는 설정
+# db_from_env = dj_database_url.config(conn_max_age=500) # DB 설정부분 아래에 입력
+# DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -190,6 +191,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'myshaman', 'build', 'static'),
 ] 
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # STATICFILES_STORAGE = [ ] 외부에 STATIC파일용 서버를 별도로 둘 경우 설정 필요
 
 
@@ -201,3 +203,5 @@ CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
 
 mimetypes.add_type("text/javascript", ".js", True)
+
+django_heroku.settings(locals())
