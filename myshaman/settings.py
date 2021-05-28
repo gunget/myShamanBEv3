@@ -8,7 +8,7 @@ import datetime
 
 import mimetypes
 import django_heroku
-import dj_database_url # 최상단에 선언부분에 입력
+# import dj_database_url # 최상단에 선언부분에 입력
 
 
 
@@ -130,9 +130,9 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-db_from_env = dj_database_url.config(conn_max_age=500) # DB 설정부분 아래에 입력
-DATABASES['default'].update(db_from_env)
-#기본 db인 sqlite3를 heroku전용인 postgreSQL로 바꾸는 설정
+# #기본 db인 sqlite3를 heroku전용인 postgreSQL로 바꾸는 설정
+# db_from_env = dj_database_url.config(conn_max_age=500) # DB 설정부분 아래에 입력
+# DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -191,6 +191,7 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR,'myshaman', 'build', 'static'),
 ] 
 
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # STATICFILES_STORAGE = [ ] 외부에 STATIC파일용 서버를 별도로 둘 경우 설정 필요
 
 
