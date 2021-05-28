@@ -178,7 +178,8 @@ STATIC_URL = '/static/'
 #장고 템플릿에서 static태그를 사용할 때 이 경로를 이용하여 절대경로로 치환한다.
 #템플릿을 사용하지 않는 리액트 프론트에서는 특별히 관계없는 설정
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATIC_ROOT = os.path.join(BASE_DIR, 'myshaman', 'build', 'static')
+# STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # 아파치, nginx등 웹서버가 클라이언트에 static file을 제공해주려면, 파일들이 어디있는지
 # 알아야 한다. 이를 위해 collectstatic명령어로 파일을 모아 특정 폴더에 몰아넣는데,
 # 이때 사용하는 폴더가 Static_Root폴더. collectStatic명령어는 폴더를 만들지 않는다.
