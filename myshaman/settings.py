@@ -3,7 +3,7 @@ from pathlib import Path
 import os, sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-import local_setting
+# import local_setting
 import datetime
 
 import mimetypes
