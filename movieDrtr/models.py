@@ -10,7 +10,8 @@ class DirectorInfo(models.Model):
     area = models.CharField(max_length=100, default='')
     # image = models.ImageField(upload_to='media/%Y/%m/%d', default='media/no_img.png', blank=True, null=True)
     # image upload시 사용. serializer에도 설정해줘야 함
-    wisesaying = models.CharField(max_length=300, default='')
+    majorWorks = models.CharField(max_length=300, default='', blank=True, null=True )
+    # majorWorks = models.CharField(max_length=300, default='')
     created_date = models.DateTimeField(auto_now_add=True)
     #글이 추가될 때 자동으로 날짜가 입력됨
        
@@ -27,6 +28,7 @@ class FicWriterInfo(models.Model):
     name = models.CharField(max_length=100, default='')
     peopleCode = models.IntegerField()
     job = models.CharField(max_length=100, default='', blank=True, null=True)
+    majorWorks = models.CharField(max_length=300, default='', blank=True, null=True )
     created_date = models.DateTimeField(auto_now_add=True)
        
     class Meta:
@@ -40,6 +42,7 @@ class NonFicWriterInfo(models.Model):
     name = models.CharField(max_length=100, default='')
     peopleCode = models.IntegerField()
     job = models.CharField(max_length=100, default='', blank=True, null=True)
+    majorWorks = models.CharField(max_length=300, default='', blank=True, null=True )
     created_date = models.DateTimeField(auto_now_add=True)
        
     class Meta:
