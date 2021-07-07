@@ -22,7 +22,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '-n%sr$4btonoo6!!q_+_9e4&*wsn$a
 # 출처: https://zodlab.tistory.com/95 [조드군의 일상]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', False))
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
 
 # ALLOWED_HOSTS = ['*'] #조드군의 일상에선 이렇게 하라고함
 ALLOWED_HOSTS = ['myshaman.herokuapp.com']
