@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/static/css/main.53730fb6.chunk.css",
-    "main.js": "/static/js/main.8cf4ee5a.chunk.js",
-    "main.js.map": "/static/js/main.8cf4ee5a.chunk.js.map",
+    "main.css": "/static/css/main.198723ea.chunk.css",
+    "main.js": "/static/js/main.f23ba9d7.chunk.js",
+    "main.js.map": "/static/js/main.f23ba9d7.chunk.js.map",
     "runtime-main.js": "/static/js/runtime-main.59f03eed.js",
     "runtime-main.js.map": "/static/js/runtime-main.59f03eed.js.map",
     "static/js/2.144f67ad.chunk.js": "/static/js/2.144f67ad.chunk.js",
     "static/js/2.144f67ad.chunk.js.map": "/static/js/2.144f67ad.chunk.js.map",
     "index.html": "/index.html",
-    "static/css/main.53730fb6.chunk.css.map": "/static/css/main.53730fb6.chunk.css.map",
+    "static/css/main.198723ea.chunk.css.map": "/static/css/main.198723ea.chunk.css.map",
     "static/js/2.144f67ad.chunk.js.LICENSE.txt": "/static/js/2.144f67ad.chunk.js.LICENSE.txt",
     "static/media/drt1.jpg": "/static/media/drt1.7d4f9d9b.jpg",
     "static/media/drt2.jpg": "/static/media/drt2.e98dd762.jpg",
@@ -33,7 +33,7 @@
   "entrypoints": [
     "static/js/runtime-main.59f03eed.js",
     "static/js/2.144f67ad.chunk.js",
-    "static/css/main.53730fb6.chunk.css",
-    "static/js/main.8cf4ee5a.chunk.js"
+    "static/css/main.198723ea.chunk.css",
+    "static/js/main.f23ba9d7.chunk.js"
   ]
 }
