@@ -22,7 +22,7 @@ SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', '-n%sr$4btonoo6!!q_+_9e4&*wsn$a
 # 출처: https://zodlab.tistory.com/95 [조드군의 일상]
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(os.environ.get('DJANGO_DEBUG', True))
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', False))
 
 # ALLOWED_HOSTS = ['*'] #조드군의 일상에선 이렇게 하라고함
 ALLOWED_HOSTS = ['myshaman.herokuapp.com']
@@ -196,7 +196,7 @@ STATICFILES_DIRS = [
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #사용자가 업로드한 파일 관리
 
-CORS_ORIGIN_WHITELIST = ( 'myshaman.herokuapp.com' ) 
+CORS_ORIGIN_WHITELIST = ['myshaman.herokuapp.com' ] 
 # CORS_ORIGIN_WHITELIST = ( 'http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:8000', 'http://127.0.0.1:8000' ) 
 CORS_ORIGIN_ALLOW_ALL = False
 CORS_ALLOW_CREDENTIALS = True
