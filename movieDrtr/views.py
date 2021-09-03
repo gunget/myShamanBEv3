@@ -131,7 +131,7 @@ class getPeopleListViewMV(View): #Director List 받아오는 view
             # 네이버영화에서 PEOPLE CODE 받아오기
             searchDtr = request.GET.get('searchDrt')
             encText = urllib.parse.quote(searchDtr)
-            url = f'https://movie.naver.com/movie/search/result.nhn?query={encText}&section=people&ie=utf8'
+            url = f'https://movie.naver.com/movie/search/result.naver?query={encText}&section=people&ie=utf8'
             html = urllib.request.urlopen(url)
             bsObj = bs4.BeautifulSoup(html, "html.parser")
             peopleLists = bsObj.select("ul.search_list_1>li")
